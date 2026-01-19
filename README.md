@@ -61,10 +61,10 @@ We use **Zustand** as the single source of truth for the application state.
 
 ```mermaid
 graph TD
-    User[User Interaction] -->|Events (PointerDown/Move)| PIXI[PIXI.js Canvas (View)]
-    PIXI -->|Dispatch Actions| Store[Zustand Store (State)]
-    Store -->|State Updates| hook[useWhiteboard Hook]
-    hook -->|Sync Properties| PIXI
+    User[User Interaction] -->|"Events (PointerDown/Move)"| PIXI["PIXI.js Canvas (View)"]
+    PIXI -->|"Dispatch Actions"| Store["Zustand Store (State)"]
+    Store -->|"State Updates"| hook[useWhiteboard Hook]
+    hook -->|"Sync Properties"| PIXI
 ```
 
 ### Key Components
