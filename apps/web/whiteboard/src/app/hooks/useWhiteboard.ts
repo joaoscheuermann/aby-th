@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { useWhiteboardStore, TransformMode } from '../store/whiteboardStore';
 import { useNodeStore, WhiteboardNode } from '../store/nodeStore';
+import { DropShadowFilter } from 'pixi-filters';
+
 import { VideoUtils } from '../engine/VideoUtils';
 
 export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | null>) => {
@@ -10,7 +12,6 @@ export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | nul
     const uiLayerRef = useRef<PIXI.Container | null>(null);
     const transformerRef = useRef<PIXI.Container | null>(null);
 
-    // Refs to track previous state for diffing
     const renderedNodesRef = useRef<Record<string, PIXI.Container>>({});
 
     const {
@@ -60,6 +61,7 @@ export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | nul
             // Layers
             const contentLayer = new PIXI.Container();
             const uiLayer = new PIXI.Container();
+
             app.stage.addChild(contentLayer);
             app.stage.addChild(uiLayer);
             contentLayerRef.current = contentLayer;
@@ -138,6 +140,15 @@ export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | nul
 
                     // Assign ID to sprite for reverse lookup
                     (sprite as any).nodeId = id;
+
+                    const shadow = new DropShadowFilter({
+                        offset: { x: 10, y: 10 },
+                        color: 0x000000,
+                        alpha: 0.5,
+                        blur: 2
+                    });
+                    sprite.filters = [shadow];
+
                     contentLayer.addChild(sprite);
                     renderedNodesRef.current[id] = sprite;
                     syncNodeToSprite(nodeData, sprite);
@@ -190,13 +201,13 @@ export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | nul
         if (sprite.scale.y !== node.scale.y) sprite.scale.y = node.scale.y;
     };
 
-    // Update Transformer Viz
+    // Update Transformer Visualization
     useEffect(() => {
         updateTransformer();
     });
 
     // =========================================
-    // Transformer Logic
+    // Transformation Logic
     // =========================================
     const createTransformer = (layer: PIXI.Container) => {
         const tr = new PIXI.Container();
@@ -413,5 +424,5 @@ export const useWhiteboard = (containerRef: React.RefObject<HTMLDivElement | nul
         }
     }, [selectedObject]);
 
-    return {}; // No longer exposing addImage/addVideo
+    return {};
 };
