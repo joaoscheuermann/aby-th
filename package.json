@@ -56,10 +56,12 @@
   ],
   "dependencies": {
     "@pixi/react": "^8.0.5",
+    "@types/uuid": "^10.0.0",
     "pixi.js": "^8.15.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "6.29.0",
+    "uuid": "^13.0.0",
     "zustand": "^5.0.10"
   }
 }
